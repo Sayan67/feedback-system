@@ -3,9 +3,10 @@ from sqlite3 import IntegrityError
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import engine, AsyncSessionLocal
+from app.database import engine, AsyncSessionLocal, get_db
 from app import models, schemas
 from app.utils import hash_password
+from app.routes import tags
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -19,9 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
+
 
 @app.post("/users/", response_model=schemas.UserOut)
 async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
@@ -44,3 +43,5 @@ async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_d
 @app.get("/")
 async def root():
     return {"message": "Feedback System API is live"}
+
+app.include_router(tags.router)

@@ -22,3 +22,15 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+class TagBase(BaseModel):
+    name: str
+
+class TagCreate(TagBase):
+    pass
+
+class TagResponse(TagBase):
+    id: UUID
+
+    class Config:
+        orm_mode = True
