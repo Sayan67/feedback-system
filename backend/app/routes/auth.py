@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from uuid import uuid4
 
 from app import schemas, models
-from app.auth import hash_password
+from app.auth import get_current_user, hash_password
 from app.database import get_db
 from fastapi.security import OAuth2PasswordRequestForm
 from app.auth import verify_password, create_access_token
@@ -71,3 +71,8 @@ async def login(
             "role": user.role
         }
     }
+
+
+@router.get("/me", response_model=schemas.UserOut)
+async def get_me(current_user: models.User = Depends(get_current_user)):
+    return current_user
