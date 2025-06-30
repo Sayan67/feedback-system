@@ -4,3 +4,11 @@ __pycache__/
 *.sqlite3
 *.db
 .env
+/bin
+/lib
+/include
+/lib64
+/local
+/share
+/var
+/etc
