@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 import {
   Input
 } from "@/components/ui/input";
@@ -19,8 +18,7 @@ import {
 import toast from "react-hot-toast";
 
 export default function SignupForm() {
-  const { signup, loading,error } = useAuth();
-  const navigate = useNavigate();
+  const { signup, loading } = useAuth();
 
   const [form, setForm] = useState({
     name: "",

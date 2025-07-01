@@ -4,14 +4,11 @@ import { useUserStore } from "@/store/user";
 import { useShallow } from "zustand/react/shallow";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useSWR from "swr";
-import { Skeleton } from "@/components/ui/skeleton";
-import toast from "react-hot-toast";
 import ManagerDashboard from "@/components/dashboard/ManagerDashboard";
 import EmployeeDashboard from "@/components/dashboard/EmployeeDashboard";
 
 function DashboardPage() {
-  const { logout, fetcher } = useAuth();
+  const { logout } = useAuth();
   const { user } = useUserStore(useShallow((state) => ({ user: state.user })));
   const navigate = useNavigate();
 

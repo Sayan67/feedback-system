@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import useSWR from "swr";
-import axios from "axios";
 import type { JSX } from "react";
 import { useAuth } from "@/hooks/useAuth";
 

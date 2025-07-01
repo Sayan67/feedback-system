@@ -2,8 +2,6 @@
 
 import useSWR from "swr";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import toast from "react-hot-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "../ui/input";
@@ -105,7 +103,7 @@ export default function ManagerDashboard() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2">
-              {member.feedbacks.map((fb: Feedback, index: number) => (
+              {member.feedbacks.map((fb: Feedback) => (
                 <div
                   key={fb.id}
                   className="flex justify-between items-center text-sm"
