@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes, useNavigate } from "react-router-dom";
+import "./index.css";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./components/providers/ProtectedRoute";
+import { useAuth } from "./hooks/useAuth";
+import { useEffect } from "react";
+import { useUserStore } from "./store/user";
+import AuthPage from "./pages/AuthPage";
+import { useShallow } from "zustand/react/shallow";
+import EmployeeDetailPage from "./pages/EmployeeDetailPage";
 
-function App() {
-  const [count, setCount] = useState(0)
+function HomeRedirect() {
+  const { loading } = useAuth();
+  const navigate = useNavigate();
+  const { user } = useUserStore(useShallow((state) => ({ user: state.user })));
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        navigate("/auth");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+  }, [user, loading, navigate]);
+
+  return null;
 }
 
-export default App
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomeRedirect />} />
+      <Route path="/auth" element={<AuthPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* Add employee page route */}
+      <Route
+        path="/me"
+        element={
+          <ProtectedRoute>
+            <div>Employee Page</div>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employee/:id"
+        element={
+          <ProtectedRoute>
+            <EmployeeDetailPage />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+}
+
+export default App;
