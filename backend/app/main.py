@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import os
 from sqlite3 import IntegrityError
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import text
@@ -28,9 +29,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+frontend_url = os.getenv("FRONTEND_URL")
+if not frontend_url:
+    frontend_url = "http://localhost:5173"
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[frontend_url],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
